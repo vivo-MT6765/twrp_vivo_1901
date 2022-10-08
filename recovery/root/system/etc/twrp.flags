@@ -20,8 +20,8 @@
 /proinfo         emmc      /dev/block/platform/bootdevice/by-name/proinfo     flags=backup
 
 # OEM related
-/vgc 		 ext4	   /dev/block/platform/bootdevice/by-name/vgc         flags=display="VGC"
-/oem             ext4      /dev/block/platform/bootdevice/by-name/cust         flags=display="Cust"
+/vgc 		     ext4	   /dev/block/platform/bootdevice/by-name/vgc         flags=display="VGC"
+/oem             ext4      /dev/block/platform/bootdevice/by-name/cust        flags=display="Cust"
 
 # Removable storage
 /external_sd     auto      /dev/block/mmcblk1p1         /dev/block/mmcblk1    flags=display="MicroSD Card"

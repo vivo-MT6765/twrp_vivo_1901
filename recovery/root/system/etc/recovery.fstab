@@ -9,7 +9,3 @@ vendor                                          /vendor               	ext4    r
 
 /dev/block/platform/bootdevice/by-name/userdata  /data                  ext4    noatime,nosuid,nodev,noauto_da_alloc,discard,errors=panic,inlinecrypt,errors=panic latemount,wait,check,quota,reservedsize=128M,formattable,resize,forcefdeorfbe=/dev/block/platform/bootdevice/by-name/metadata
 /dev/block/platform/bootdevice/by-name/para      /para                  emmc    defaults                                            defaults
-
-# vivo specific partition
-/dev/block/platform/bootdevice/by-name/cust      /oem                   ext4    ro                                                  wait,,avb,first_stage_mount
-/dev/block/platform/bootdevice/by-name/vgc       /vgc                   ext4    ro                                                  wait,,avb,first_stage_mount
