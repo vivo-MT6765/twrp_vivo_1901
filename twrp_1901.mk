@@ -9,6 +9,9 @@ PRODUCT_RELEASE_NAME := 1901
 # Inherit from vivo 1901 device
 $(call inherit-product, device/vivo/1901/device.mk)
 
+# Inherit some common twrp stuff.
+$(call inherit-product, vendor/twrp/config/common.mk)
+
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := $(PRODUCT_RELEASE_NAME)
 PRODUCT_NAME := twrp_$(PRODUCT_RELEASE_NAME)

@@ -20,6 +20,8 @@ BOARD_PREBUILT_DTBOIMAGE := device/vivo/V6765-kernel/1901/dtbo.img
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 TARGET_PREBUILT_DTB := device/vivo/V6765-kernel/1901/dtb.img
 
+BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
+
 # Partitions
 BOARD_USES_METADATA_PARTITION := true
 
