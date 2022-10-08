@@ -1,0 +1,103 @@
+import /init.recovery.trustonic.rc 
+
+on init
+    mkdir /mnt/vendor/persist
+    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
+    symlink /vendor/lib64/hw/libMcGatekeeper.so   /vendor/lib64/hw/gatekeeper.k62v1_64_bsp.so
+    symlink /vendor/lib64/hw/libMcGatekeeper.so   /vendor/lib64/hw/gatekeeper.mt6765.so
+    symlink /vendor/lib64/hw/libMcGatekeeper.so   /vendor/lib64/hw/gatekeeper.mt6762.so
+    symlink /vendor/lib64/hw/libMcGatekeeper.so   /vendor/lib64/hw/gatekeeper.default.so
+    symlink /vendor/lib64/hw/libMcTeeKeymaster.so /vendor/lib64/hw/keystore.mt6765.so
+    symlink /vendor/lib64/hw/libMcTeeKeymaster.so /vendor/lib64/hw/keystore.mt6762.so
+    symlink /vendor/lib64/hw/libMcTeeKeymaster.so /vendor/lib64/hw/keystore.k62v1_64_bsp.so
+
+on fs
+    install_keyring
+    setprop crypto.ready 1
+
+service keystore_auth /system/bin/keystore_auth
+    oneshot
+    user system
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service keystore /system/bin/keystore /tmp/misc/keystore
+    user root
+    group root drmrpc readproc
+    disabled
+    seclabel u:r:recovery:s0
+
+service keymaster-3-0 /system/bin/android.hardware.keymaster@3.0-service.trustonic
+    user root
+    group root drmrpc
+    disabled
+    seclabel u:r:recovery:s0
+
+service keymaster-4-0 /system/bin/android.hardware.keymaster@4.0-service.trustonic
+    user root
+    group root drmrpc
+    disabled
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service guardianangle  /system/bin/guardianangle
+    disabled
+    user root
+    seclabel u:r:recovery:s0
+
+service vivofbe /system/bin/vivofbe
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
+on property:hwservicemanager.ready=true && property:ro.hardware=mt6765
+    start mobicore
+    start keymaster-4-0
+    start gatekeeper-1-0
+    start guardianangle
+    start vivofbe
+
+on property:hwservicemanager.ready=true && property:ro.hardware=mt6762
+    start mobicore
+    start keymaster-3-0
+    start gatekeeper-1-0
+    start guardianangle
+    start vivofbe
+
+on property:ro.crypto.state=unsupported
+    stop mobicore
+    stop keymaster-3-0
+    stop keymaster-4-0
+    stop gatekeeper-1-0
+    stop guardianangle
+    stop vivofbe
+
+on property:ro.crypto.state=unencrypted
+    stop mobicore
+    stop keymaster-3-0
+    stop keymaster-4-0
+    stop gatekeeper-1-0
+    stop guardianangle
+    stop vivofbe
+
+on property:twrp.decrypt.done=true
+    stop mobicore
+    stop keymaster-3-0
+    stop keymaster-4-0
+    stop gatekeeper-1-0
+    stop guardianangle
+    stop vivofbe
+
+# Normal mode, FDE
+on property:ro.crypto.type=block
+    write /proc/bootprof "MOBICORE: create /data/vendor/mcRegistry ++ (FDE encrypted)"
+    mkdir /data/vendor/mcRegistry 0775 system system
+    write /proc/bootprof "MOBICORE: create /data/vendor/mcRegistry -- (FDE encrypted)"

@@ -1,0 +1,28 @@
+# mount point    fstype    device                       device2               flags
+/system_image    emmc      /dev/block/platform/bootdevice/by-name/system
+/vendor_image    emmc      /dev/block/platform/bootdevice/by-name/vendor	
+
+/recovery        emmc      /dev/block/platform/bootdevice/by-name/recovery    flags=display="Recovery"
+/boot            emmc      /dev/block/platform/bootdevice/by-name/boot        flags=display="Boot"
+/cache           ext4      /dev/block/platform/bootdevice/by-name/cache       flags=display="Cache"
+/dtbo            emmc      /dev/block/platform/bootdevice/by-name/dtbo        flags=backup
+/vbmeta          emmc      /dev/block/platform/bootdevice/by-name/vbmeta      flags=backup;flashimg
+/persist         ext4      /dev/block/platform/bootdevice/by-name/persist
+/metadata        ext4      /dev/block/platform/bootdevice/by-name/md_udc
+
+# IMEI and modem related
+# below four partitions are ext4, but we are using only for backup so emmc
+/protect_f       emmc      /dev/block/platform/bootdevice/by-name/protect1    flags=backup
+/protect_s       emmc      /dev/block/platform/bootdevice/by-name/protect2    flags=backup
+/nvdata          emmc      /dev/block/platform/bootdevice/by-name/nvdata      flags=backup
+/nvcfg           emmc      /dev/block/platform/bootdevice/by-name/nvcfg       flags=backup
+/nvram           emmc      /dev/block/platform/bootdevice/by-name/nvram       flags=backup
+/proinfo         emmc      /dev/block/platform/bootdevice/by-name/proinfo     flags=backup
+
+# OEM related
+/vgc 		 ext4	   /dev/block/platform/bootdevice/by-name/vgc         flags=display="VGC"
+/oem             ext4      /dev/block/platform/bootdevice/by-name/cust         flags=display="Cust"
+
+# Removable storage
+/external_sd     auto      /dev/block/mmcblk1p1         /dev/block/mmcblk1    flags=display="MicroSD Card"
+/usb-otg         auto      /dev/block/sda1              /dev/block/sda        flags=display="USB OTG";storage;wipeingui;removable

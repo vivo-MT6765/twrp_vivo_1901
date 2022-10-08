@@ -1,0 +1,15 @@
+# Android fstab file.
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+#<src>                                          <mnt_point>            <type>  <mnt_flags and options>                              <fs_mgr_flags>
+# Core Partitions
+system                                          /system               	ext4    ro                                                  wait,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+vendor                                          /vendor               	ext4    ro                                                  wait,avb,logical,first_stage_mount
+
+/dev/block/platform/bootdevice/by-name/userdata  /data                  ext4    noatime,nosuid,nodev,noauto_da_alloc,discard,errors=panic,inlinecrypt,errors=panic latemount,wait,check,quota,reservedsize=128M,formattable,resize,forcefdeorfbe=/dev/block/platform/bootdevice/by-name/metadata
+/dev/block/platform/bootdevice/by-name/para      /para                  emmc    defaults                                            defaults
+
+# vivo specific partition
+/dev/block/platform/bootdevice/by-name/cust      /oem                   ext4    ro                                                  wait,,avb,first_stage_mount
+/dev/block/platform/bootdevice/by-name/vgc       /vgc                   ext4    ro                                                  wait,,avb,first_stage_mount
